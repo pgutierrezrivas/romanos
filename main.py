@@ -35,7 +35,6 @@ def entero_a_romano(num:int) -> str:
     longitud = len(lista) 
     numero_romano = ""
     
-
     for i in range(longitud):
         longitud -=1
         lista[i] += "0"*longitud
