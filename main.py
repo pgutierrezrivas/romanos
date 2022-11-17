@@ -28,6 +28,26 @@ dic_entero_a_romano = {
     1000:'M', 2000:'MM', 3000:'MMM'
 }
 
+dic_romano_a_entero = {
+    'I':1,
+    'V':5,
+    'X':10,
+    'L':50,
+    'C':100,
+    'D':500,
+    'M':1000
+}
+
+def romano_a_entero(rom:str) -> int:
+    lista = list(rom)
+    valor_entero = 0
+
+    for i in rom:
+        valor_entero += dic_romano_a_entero.get(i)
+    
+    return valor_entero
+
+
 def entero_a_romano(num:int) -> str:
     
     num = "{:0>4d}".format(num)
@@ -43,6 +63,8 @@ def entero_a_romano(num:int) -> str:
     return numero_romano
 
 print("funcion en accion",entero_a_romano(336))
+
+print("Romano a entero",romano_a_entero('I'))
 
 
 
