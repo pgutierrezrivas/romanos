@@ -1,16 +1,3 @@
-'''
-1-Crear una funcion que pase de entero > 0 y < 4000 a romano
-
-2-Cualquier otra entrada debe dar error
-
-Casos de prueba
-a) 1994 -> MCMXCIV
-b) 4000->RomanNumberError("el valor debe ser menor de 4000")
-c)"unacadena" -> RomanNumberErro("debe ser un entero")
-d)0-> RomanNumberError("el valor debe ser mayor a cero")
-e)-3 ->RomanNumberError("el valor debe ser mayor de cero")
-f)4.5 -> RomanNumberError("Debe ser un entero")
-'''
 
 class RomanNumberError(Exception):
     pass
@@ -29,22 +16,40 @@ dic_entero_a_romano = {
 }
 
 dic_romano_a_entero = {
-    'I':1,
-    'V':5,
-    'X':10,
-    'L':50,
-    'C':100,
-    'D':500,
-    'M':1000
+    'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000
+}
+
+restas = {
+    "I":("V", "X"),
+    "X":("L", "C"),
+    "C":("D", "M")
 }
 
 def romano_a_entero(rom:str) -> int:
-    lista = list(rom)
     valor_entero = 0
+    caracter_anterior = ""
+    cont_repes = 0
 
-    for i in rom:
-        valor_entero += dic_romano_a_entero.get(i)
-    
+    for caracter in rom:
+
+        if caracter == caracter_anterior:
+            if caracter_anterior == "L" or caracter_anterior == "D" or caracter_anterior == "V":
+                raise RomanNumberError("No se pueden repetir estos valores: L,D,V")   
+            cont_repes += 1
+        else:
+            cont_repes = 1
+        if cont_repes > 3:
+            raise RomanNumberError("No se puede repetir el valor más de tres veces")
+
+        if dic_romano_a_entero.get(caracter_anterior,0) < dic_romano_a_entero.get(caracter):
+            if caracter_anterior == "L" or caracter_anterior == "D" or caracter_anterior == "V":
+                raise RomanNumberError(f"El símbolo romano {caracter_anterior} no se puede restar")
+            if caracter_anterior and caracter not in restas[caracter_anterior]:
+                raise RomanNumberError(f"El simbolo romano {caracter_anterior} solo se puede restar de {restas[caracter_anterior][0]} y {restas[caracter_anterior][1]}")
+            valor_entero -= dic_romano_a_entero.get(caracter_anterior,0)*2
+        caracter_anterior = caracter
+        valor_entero += dic_romano_a_entero.get(caracter)
+
     return valor_entero
 
 
@@ -64,7 +69,7 @@ def entero_a_romano(num:int) -> str:
 
 print("funcion en accion",entero_a_romano(336))
 
-print("Romano a entero",romano_a_entero('I'))
+print("Romano a entero",romano_a_entero('CM'))
 
 
 
