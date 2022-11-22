@@ -20,40 +20,58 @@ dic_romano_a_entero = {
 }
 
 restas = {
-    "I":("V", "X"),
-    "X":("L", "C"),
-    "C":("D", "M")
+    'I':('V','X'),
+    'X':('L','C'),
+    'C':('D','M')   
 }
 
-def romano_a_entero(rom:str) -> int:
+def romano_a_entero(rom:str)->int: 
+    print("valor romano: ",rom)
+    
     valor_entero = 0
     caracter_anterior = ""
+    caracter_ante_anterior = ""
     cont_repes = 0
 
     for caracter in rom:
 
         if caracter == caracter_anterior:
             if caracter_anterior == "L" or caracter_anterior == "D" or caracter_anterior == "V":
-                raise RomanNumberError("No se pueden repetir estos valores: L,D,V")   
-            cont_repes += 1
+                raise RomanNumberError("No se puede repetir estos valores: L,D,V")
+            cont_repes +=1
         else:
-            cont_repes = 1
+            cont_repes =1
+        
         if cont_repes > 3:
             raise RomanNumberError("No se puede repetir el valor más de tres veces")
+        
+        if cont_repes == 2 and caracter in "LDV":
+            raise RomanNumberError(f"No se puede repetir estos valores: L,D,V, su valor repetido es {caracter}")
 
-        if dic_romano_a_entero.get(caracter_anterior,0) < dic_romano_a_entero.get(caracter):
-            if caracter_anterior == "L" or caracter_anterior == "D" or caracter_anterior == "V":
-                raise RomanNumberError(f"El símbolo romano {caracter_anterior} no se puede restar")
-            if caracter_anterior and caracter not in restas[caracter_anterior]:
+        if caracter_anterior and dic_romano_a_entero.get(caracter_anterior) < dic_romano_a_entero.get(caracter):
+            if caracter_anterior == "V" or caracter_anterior=="L" or caracter_anterior=="D":
+                raise RomanNumberError(f"El simbolo romano {caracter_anterior} no se puede restar")
+            #if caracter_anterior and (caracter not in restas[caracter_anterior]):
+            if caracter not in restas[caracter_anterior]:
                 raise RomanNumberError(f"El simbolo romano {caracter_anterior} solo se puede restar de {restas[caracter_anterior][0]} y {restas[caracter_anterior][1]}")
+            if caracter_anterior not in restas.keys():
+                raise RomanNumberError(f"El simbolo romano {caracter_anterior} no se puede restar")
+            if caracter_anterior == caracter_ante_anterior:
+                raise RomanNumberError("Si hay repeticiones no se resta")
+            
             valor_entero -= dic_romano_a_entero.get(caracter_anterior,0)*2
+        
+        caracter_ante_anterior = caracter_anterior
         caracter_anterior = caracter
         valor_entero += dic_romano_a_entero.get(caracter)
 
     return valor_entero
 
+#print("Romano a entero: ",romano_a_entero("XXC"))
 
 def entero_a_romano(num:int) -> str:
+    if num > 3999 or num < 0:
+        raise RomanNumberError("El limite de valor es de 0 a 3999")
     
     num = "{:0>4d}".format(num)
     lista = list(num)
@@ -67,9 +85,8 @@ def entero_a_romano(num:int) -> str:
 
     return numero_romano
 
-print("funcion en accion",entero_a_romano(336))
+print("funcion en accion",entero_a_romano(3999))
 
-print("Romano a entero",romano_a_entero('CM'))
 
 
 
