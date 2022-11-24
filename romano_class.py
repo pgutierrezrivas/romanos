@@ -32,12 +32,14 @@ class NumeroRomano():
     def __init__(self, valor):
         
         if isinstance(valor,str):
-            self.representacion = valor
+            self.representacion = valor #expresiones o simbolo romano
             self.valor = self.romano_a_entero(valor)
         
         elif isinstance(valor,int):
-            self.valor = valor
+            self.valor = valor #valor en numero
             self.representacion = self.entero_a_romano(valor)
+        else:
+            raise RomanNumberError("El valor debe ser cadena o entero")
 
     
     def entero_a_romano(self,num):
@@ -96,15 +98,15 @@ class NumeroRomano():
 
         return valor_entero
     
-    
+
     def __repr__(self):
         return self.representacion
     
     def __add__(self, otro):
         if isinstance(otro,NumeroRomano):
-            return NumeroRomano(self.valor+ otro.valor)#recoge el valor del otro objeto
+            return NumeroRomano(self.valor + otro.valor)#recoge el valor del otro objeto
         elif isinstance(otro,int):
-            return NumeroRomano(self.valor+otro)#recibe el valor del otro objeto
+            return NumeroRomano(self.valor + otro)#recibe el valor del otro objeto
 
 
 r_a_e=NumeroRomano("XXXV")
